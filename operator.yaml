@@ -294,6 +294,7 @@ rules:
   resources:
   - deployments
   - deployments/finalizers
+  - replicasets
   - statefulsets
   verbs:
   - create
