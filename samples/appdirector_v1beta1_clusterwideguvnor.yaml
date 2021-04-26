@@ -3,7 +3,7 @@ kind: ClusterWideGuvnor
 metadata:
   name: guvnor
 spec:
-  namespace: app-director-example-app
+  namespace: app-director
   guvnorCertsSecretName: guvnor-certs
   guvnorImage: randoli/app-director:dev
   guvnorSecretName: guvnor-secret
