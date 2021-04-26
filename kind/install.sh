@@ -44,9 +44,9 @@ docker pull gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.
 echo "----------------------------------"
 echo "Creating namespace and applying the secrets"
 echo "----------------------------------"
-kubectl create namespace app-director-example-app
+kubectl create namespace app-director
 
-kubectl config set-context --current --namespace=app-director-example-app
+kubectl config set-context --current --namespace=app-director
 
 kubectl apply -f guvnor-secret.yaml
 
