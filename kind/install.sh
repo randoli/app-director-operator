@@ -9,9 +9,9 @@ chmod +x ./kind
 echo "----------------------------------"
 echo "Creating Kind cluster and configuring the kubectl context"
 echo "----------------------------------"
-./kind create cluster --name guvnor-operator
+./kind create cluster --name guvnor-operator --image kindest/node:v1.19.7
 
-# Setup local kind to use the kind
+# Setup local kind to use the kind 
 kubectl config use-context kind-guvnor-operator
 
 #Install images in kind
