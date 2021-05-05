@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  app-director-operator:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-05-05T15:31:46.945388438-04:00"
+    description: A Helm chart for Kubernetes
+    digest: c49f0788ed524cbbd7f3e3cffc34509bc77b2f71b45b80a0bd69370d905cecaf
+    name: app-director-operator
+    type: application
+    urls:
+    - https://randoli.github.io/app-director-operator/app-director-operator-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-05-05T15:31:46.944703321-04:00"

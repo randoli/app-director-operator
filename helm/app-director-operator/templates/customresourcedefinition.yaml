@@ -1,0 +1,128 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.4.1
+  creationTimestamp: null
+  name: clusterwideguvnors.appdirector.randoli.ca
+spec:
+  group: appdirector.randoli.ca
+  names:
+    kind: ClusterWideGuvnor
+    listKind: ClusterWideGuvnorList
+    plural: clusterwideguvnors
+    singular: clusterwideguvnor
+  scope: Cluster
+  versions:
+  - name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: ClusterWideGuvnor is the Schema for the clusterwideguvnors API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ClusterWideGuvnorSpec defines the desired state of ClusterWideGuvnor
+            properties:
+              guvnorCertsSecretName:
+                default: guvnor-certs
+                type: string
+              guvnorImage:
+                default: randoli/app-director:dev
+                type: string
+              guvnorSecretName:
+                default: guvnor-secret
+                type: string
+              namespace:
+                default: app-director
+                type: string
+              tektonOperatorVersion:
+                type: string
+            type: object
+          status:
+            description: ClusterWideGuvnorStatus defines the observed state of ClusterWideGuvnor
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.4.1
+  creationTimestamp: null
+  name: guvnors.appdirector.randoli.ca
+spec:
+  group: appdirector.randoli.ca
+  names:
+    kind: Guvnor
+    listKind: GuvnorList
+    plural: guvnors
+    singular: guvnor
+  scope: Namespaced
+  versions:
+  - name: v1beta1
+    schema:
+      openAPIV3Schema:
+        description: Guvnor is the Schema for the guvnors API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: GuvnorSpec defines the desired state of Guvnor
+            properties:
+              guvnorCertsSecretName:
+                default: guvnor-certs
+                type: string
+              guvnorImage:
+                default: randoli/app-director:dev
+                type: string
+              guvnorSecretName:
+                default: guvnor-secret
+                type: string
+              tektonOperatorVersion:
+                type: string
+            type: object
+          status:
+            description: GuvnorStatus defines the observed state of Guvnor
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
+status:
+  acceptedNames:
+    kind: ""
+    plural: ""
+  conditions: []
+  storedVersions: []
