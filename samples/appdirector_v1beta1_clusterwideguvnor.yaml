@@ -5,5 +5,5 @@ metadata:
 spec:
   namespace: app-director
   guvnorCertsSecretName: guvnor-certs
-  guvnorImage: randoli/app-director:dev
+  guvnorImage: randoli/app-director:uat
   guvnorSecretName: guvnor-secret
