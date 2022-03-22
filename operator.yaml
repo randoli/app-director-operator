@@ -746,7 +746,7 @@ spec:
         - --leader-elect
         command:
         - /manager
-        image: docker.io/randoli/app-director-operator:0.0.1
+        image: docker.io/randoli/app-director-operator:0.0.2
         livenessProbe:
           httpGet:
             path: /healthz
@@ -763,12 +763,10 @@ spec:
         resources:
           limits:
             cpu: 100m
-            memory: 30Mi
+            memory: 150Mi
           requests:
             cpu: 100m
             memory: 20Mi
         securityContext:
           allowPrivilegeEscalation: false
-      securityContext:
-        runAsUser: 65532
       terminationGracePeriodSeconds: 10
