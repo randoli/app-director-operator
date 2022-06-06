@@ -609,6 +609,21 @@ rules:
   - patch
   - update
   - watch
+- apiGroups:
+  - security.openshift.io
+  resourceNames:
+  - anyuid
+  - privileged
+  resources:
+  - securitycontextconstraints
+  verbs:
+  - use
+- apiGroups:
+  - config.openshift.io
+  resources:
+  - clusterversions
+  verbs:
+  - get
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -746,7 +761,7 @@ spec:
         - --leader-elect
         command:
         - /manager
-        image: docker.io/randoli/app-director-operator:0.0.1
+        image: docker.io/randoli/app-director-operator:0.7.3
         livenessProbe:
           httpGet:
             path: /healthz
@@ -763,12 +778,10 @@ spec:
         resources:
           limits:
             cpu: 100m
-            memory: 30Mi
+            memory: 150Mi
           requests:
             cpu: 100m
             memory: 20Mi
         securityContext:
           allowPrivilegeEscalation: false
-      securityContext:
-        runAsUser: 65532
       terminationGracePeriodSeconds: 10
