@@ -613,7 +613,7 @@ rules:
   - security.openshift.io
   resourceNames:
   - anyuid
-  - privileged
+  - nonroot
   resources:
   - securitycontextconstraints
   verbs:
