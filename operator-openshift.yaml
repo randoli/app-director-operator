@@ -11,20 +11,25 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.4.1
   creationTimestamp: null
-  name: clusterwideguvnors.appdirector.randoli.ca
+  name: appdirectoragents.appdirector.randoli.ca
 spec:
   group: appdirector.randoli.ca
   names:
-    kind: ClusterWideGuvnor
-    listKind: ClusterWideGuvnorList
-    plural: clusterwideguvnors
-    singular: clusterwideguvnor
-  scope: Cluster
+    kind: AppDirectorAgent
+    listKind: AppDirectorAgentList
+    plural: appdirectoragents
+    singular: appdirectoragent
+  scope: Namespaced
   versions:
-  - name: v1beta1
+  - additionalPrinterColumns:
+    - jsonPath: .status.managedNamespaceHistory
+      name: ManagedNamespaceHistory
+      type: string
+    name: v1beta1
     schema:
       openAPIV3Schema:
-        description: App Director Agent that manages applications across the cluster.
+        description: App Director Agent that manages applications for a particular
+          namespace only.
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -39,29 +44,31 @@ spec:
           metadata:
             type: object
           spec:
-            description: ClusterWideGuvnorSpec defines the desired state of ClusterWideGuvnor
+            description: AppDirectorAgentSpec defines the desired state of AppDirectorAgent
             properties:
-              guvnorCertsSecretName:
+              agentCertsSecretName:
                 default: guvnor-certs
-                description: GuvnorCertsSecretName specifies the name of the secret
-                  that contains the required certificates for Guvnor to run.
+                description: AgentCertsSecretName specifies the name of the secret
+                  that contains the required certificates for the agent to run.
                 type: string
-              guvnorSecretName:
+              agentConfigSecretName:
                 default: guvnor-secret
-                description: GuvnorSecretName specifies the name of the secret that
-                  contains required configuration for Guvnor to run.
+                description: AgentSecretName specifies the name of the secret that
+                  contains required configuration for the agent to run.
                 type: string
-              namespace:
-                default: app-director
-                description: Namespace specifies the namespace where Guvnor will instantiate.
-                type: string
+              managedNamespaces:
+                description: ManagedNamespaces specifies the namespaces that the agent
+                  is able to deploy applications to.
+                items:
+                  type: string
+                type: array
             type: object
           status:
-            description: ClusterWideGuvnorStatus defines the observed state of ClusterWideGuvnor
+            description: AppDirectorAgentStatus defines the observed state of AppDirectorAgent
             properties:
               conditions:
                 description: Conditions give updates on the current status of the
-                  running Guvnor instance.
+                  running agent instance.
                 items:
                   description: "Condition contains details for one aspect of the current
                     state of this API Resource. --- This struct is intended for direct
@@ -130,8 +137,14 @@ spec:
                   - type
                   type: object
                 type: array
+              managedNamespaceHistory:
+                description: ManagedNamespaceHistory stores most recent history of
+                  managed namespaces to reduce risk of lingering persmissions.
+                items:
+                  type: string
+                type: array
             required:
-            - conditions
+            - managedNamespaceHistory
             type: object
         type: object
     served: true
@@ -151,21 +164,20 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.4.1
   creationTimestamp: null
-  name: guvnors.appdirector.randoli.ca
+  name: clusterwideappdirectoragents.appdirector.randoli.ca
 spec:
   group: appdirector.randoli.ca
   names:
-    kind: Guvnor
-    listKind: GuvnorList
-    plural: guvnors
-    singular: guvnor
-  scope: Namespaced
+    kind: ClusterWideAppDirectorAgent
+    listKind: ClusterWideAppDirectorAgentList
+    plural: clusterwideappdirectoragents
+    singular: clusterwideappdirectoragent
+  scope: Cluster
   versions:
   - name: v1beta1
     schema:
       openAPIV3Schema:
-        description: App Director Agent that manages applications for a particular
-          namespace only.
+        description: App Director Agent that manages applications across the cluster.
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -180,25 +192,32 @@ spec:
           metadata:
             type: object
           spec:
-            description: GuvnorSpec defines the desired state of Guvnor
+            description: ClusterWideAppDirectorAgentSpec defines the desired state
+              of ClusterWideAppDirectorAgent
             properties:
-              guvnorCertsSecretName:
+              agentCertsSecretName:
                 default: guvnor-certs
-                description: GuvnorCertsSecretName specifies the name of the secret
-                  that contains the required certificates for Guvnor to run.
+                description: AgentCertsSecretName specifies the name of the secret
+                  that contains the required certificates for the agent to run.
                 type: string
-              guvnorSecretName:
+              agentConfigSecretName:
                 default: guvnor-secret
-                description: GuvnorSecretName specifies the name of the secret that
-                  contains required configuration for Guvnor to run.
+                description: AgentConfigSecretName specifies the name of the secret
+                  that contains required configuration for the agent to run.
+                type: string
+              namespace:
+                default: app-director
+                description: Namespace specifies the namespace where the agent will
+                  instantiate.
                 type: string
             type: object
           status:
-            description: GuvnorStatus defines the observed state of Guvnor
+            description: ClusterWideAppDirectorAgentStatus defines the observed state
+              of ClusterWideAppDirectorAgent
             properties:
               conditions:
                 description: Conditions give updates on the current status of the
-                  running Guvnor instance.
+                  running agent instance.
                 items:
                   description: "Condition contains details for one aspect of the current
                     state of this API Resource. --- This struct is intended for direct
@@ -321,58 +340,92 @@ rules:
   resources:
   - configmaps
   - events
-  - namespaces
+  - limitranges
+  - persistentvolumeclaims
+  - pods
+  - pods/log
   - secrets
   - serviceaccounts
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - namespaces
   - services
   verbs:
   - create
   - delete
   - get
   - list
-  - patch
   - update
   - watch
 - apiGroups:
   - ""
-  resources:
-  - limitranges
-  - persistentvolumeclaims
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - ""
+  resourceNames:
+  - tekton-pipelines
   resources:
   - namespaces/finalizers
   verbs:
   - update
 - apiGroups:
-  - ""
-  resources:
-  - pods
-  - pods/log
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
   - admissionregistration.k8s.io
   resources:
   - mutatingwebhookconfigurations
+  verbs:
+  - create
+  - list
+  - watch
+- apiGroups:
+  - admissionregistration.k8s.io
+  resourceNames:
+  - webhook.pipeline.tekton.dev
+  resources:
+  - mutatingwebhookconfigurations
+  verbs:
+  - delete
+  - get
+  - update
+- apiGroups:
+  - admissionregistration.k8s.io
+  resources:
   - validatingwebhookconfigurations
   verbs:
   - create
+  - list
+  - watch
+- apiGroups:
+  - admissionregistration.k8s.io
+  resourceNames:
+  - config.webhook.pipeline.tekton.dev
+  resources:
+  - validatingwebhookconfigurations
+  verbs:
   - delete
+  - get
+  - update
+- apiGroups:
+  - admissionregistration.k8s.io
+  resourceNames:
+  - validation.webhook.pipeline.tekton.dev
+  resources:
+  - validatingwebhookconfigurations
+  verbs:
+  - delete
+  - get
+  - update
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  verbs:
+  - create
   - get
   - list
   - patch
@@ -381,11 +434,8 @@ rules:
 - apiGroups:
   - apiextensions.k8s.io
   resources:
-  - customresourcedefinitions
   - customresourcedefinitions/status
   verbs:
-  - create
-  - delete
   - get
   - list
   - patch
@@ -394,33 +444,7 @@ rules:
 - apiGroups:
   - appdirector.randoli.ca
   resources:
-  - clusterwideguvnors
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - appdirector.randoli.ca
-  resources:
-  - clusterwideguvnors/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - appdirector.randoli.ca
-  resources:
-  - clusterwideguvnors/status
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - appdirector.randoli.ca
-  resources:
-  - guvnors
+  - appdirectoragents
   verbs:
   - create
   - delete
@@ -432,13 +456,39 @@ rules:
 - apiGroups:
   - appdirector.randoli.ca
   resources:
-  - guvnors/finalizers
+  - appdirectoragents/finalizers
   verbs:
   - update
 - apiGroups:
   - appdirector.randoli.ca
   resources:
-  - guvnors/status
+  - appdirectoragents/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - appdirector.randoli.ca
+  resources:
+  - clusterwideappdirectoragents
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - appdirector.randoli.ca
+  resources:
+  - clusterwideappdirectoragents/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - appdirector.randoli.ca
+  resources:
+  - clusterwideappdirectoragents/status
   verbs:
   - get
   - patch
@@ -448,7 +498,6 @@ rules:
   resources:
   - deployments
   - deployments/finalizers
-  - replicasets
   - statefulsets
   verbs:
   - create
@@ -459,23 +508,21 @@ rules:
   - update
   - watch
 - apiGroups:
+  - apps
+  resources:
+  - replicasets
+  verbs:
+  - create
+  - get
+  - list
+  - patch
+  - update
+- apiGroups:
   - autoscaling
   resources:
   - horizontalpodautoscalers
   verbs:
   - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - config.openshift.io
-  resources:
-  - clusterversions
-  verbs:
-  - get
 - apiGroups:
   - coordination.k8s.io
   resources:
@@ -496,24 +543,26 @@ rules:
   - create
   - delete
   - get
-  - list
-  - patch
-  - update
-  - watch
 - apiGroups:
   - policy
   resources:
   - poddisruptionbudgets
+  verbs:
+  - create
+- apiGroups:
+  - policy
+  resources:
   - podsecuritypolicies
   verbs:
   - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
+- apiGroups:
+  - policy
+  resourceNames:
+  - tekton-pipelines
+  resources:
+  - podsecuritypolicies
+  verbs:
   - use
-  - watch
 - apiGroups:
   - rbac.authorization.k8s.io
   resources:
@@ -523,19 +572,6 @@ rules:
   - delete
   - get
   - list
-  - update
-  - watch
-- apiGroups:
-  - rbac.authorization.k8s.io
-  resources:
-  - clusterrolebindings
-  - clusterroles
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
   - update
   - watch
 - apiGroups:
@@ -558,30 +594,15 @@ rules:
   - delete
   - get
   - list
-  - patch
-  - update
   - watch
-- apiGroups:
-  - security.openshift.io
-  resourceNames:
-  - anyuid
-  resources:
-  - securitycontextconstraints
-  verbs:
-  - use
 - apiGroups:
   - tekton.dev
   resources:
   - clustertasks
   - clustertasks/status
-  - conditions
-  - runs
-  - runs/finalizers
-  - runs/status
   verbs:
   - create
   - delete
-  - deletecollection
   - get
   - list
   - patch
@@ -590,17 +611,75 @@ rules:
 - apiGroups:
   - tekton.dev
   resources:
+  - conditions
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - tekton.dev
+  resources:
+  - conditions
+  - pipelineresources
+  - pipelineruns
+  - pipelines
+  - taskruns
+  - tasks
+  verbs:
+  - deletecollection
+- apiGroups:
+  - tekton.dev
+  resources:
   - pipelineresources
   - pipelineresources/status
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - tekton.dev
+  resources:
   - pipelineruns
   - pipelineruns/finalizers
   - pipelineruns/status
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - tekton.dev
+  resources:
   - pipelines
   - pipelines/status
   verbs:
   - create
   - delete
-  - deletecollection
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - tekton.dev
+  resources:
+  - runs
+  - runs/finalizers
+  - runs/status
+  verbs:
+  - create
+  - delete
   - get
   - list
   - patch
@@ -612,17 +691,41 @@ rules:
   - taskruns
   - taskruns/finalizers
   - taskruns/status
-  - tasks
-  - tasks/status
   verbs:
   - create
   - delete
-  - deletecollection
   - get
   - list
   - patch
   - update
   - watch
+- apiGroups:
+  - tekton.dev
+  resources:
+  - tasks
+  - tasks/status
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - config.openshift.io
+  resources:
+  - clusterversions
+  verbs:
+  - get
+- apiGroups:
+  - security.openshift.io
+  resourceNames:
+  - anyuid
+  resources:
+  - securitycontextconstraints
+  verbs:
+  - use
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -760,7 +863,7 @@ spec:
         - --leader-elect
         command:
         - /manager
-        image: docker.io/randoli/app-director-operator:0.7.3
+        image: docker.io/randoli/app-director-operator:0.8.0
         imagePullPolicy: Always
         livenessProbe:
           httpGet:

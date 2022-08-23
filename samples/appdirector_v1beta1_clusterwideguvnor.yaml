@@ -1,8 +1,8 @@
 apiVersion: appdirector.randoli.ca/v1beta1
-kind: ClusterWideGuvnor
+kind: ClusterWideAppDirectorAgent
 metadata:
   name: guvnor
 spec:
   namespace: app-director
-  guvnorCertsSecretName: guvnor-certs
-  guvnorSecretName: guvnor-secret
+  agentCertsSecretName: guvnor-certs
+  agentConfigSecretName: guvnor-secret
