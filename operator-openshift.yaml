@@ -868,7 +868,7 @@ spec:
         - --leader-elect
         command:
         - /manager
-        image: docker.io/randoli/app-director-operator:0.9.1
+        image: docker.io/randoli/app-director-operator:1.0.0
         imagePullPolicy: Always
         livenessProbe:
           httpGet:
