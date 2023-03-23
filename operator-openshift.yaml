@@ -544,6 +544,14 @@ rules:
   - delete
   - get
 - apiGroups:
+  - monitoring.coreos.com
+  resources:
+  - servicemonitors
+  verbs:
+  - create
+  - delete
+  - get
+- apiGroups:
   - policy
   resources:
   - poddisruptionbudgets
