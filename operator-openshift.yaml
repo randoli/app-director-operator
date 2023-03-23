@@ -10,6 +10,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.4.1
+  creationTimestamp: null
   name: appdirectoragents.appdirector.randoli.ca
 spec:
   group: appdirector.randoli.ca
@@ -162,6 +163,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.4.1
+  creationTimestamp: null
   name: clusterwideappdirectoragents.appdirector.randoli.ca
 spec:
   group: appdirector.randoli.ca
@@ -330,6 +332,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+  creationTimestamp: null
   name: app-director-manager-role
 rules:
 - apiGroups:
@@ -723,14 +726,6 @@ rules:
   - securitycontextconstraints
   verbs:
   - use
-- apiGroups:
-  - monitoring.coreos.com
-  resources: 
-  - servicemonitors
-  verbs: 
-  - create
-  - delete
-  - get
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole

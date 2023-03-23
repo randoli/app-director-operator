@@ -10,6 +10,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.4.1
+  creationTimestamp: null
   name: appdirectoragents.appdirector.randoli.ca
 spec:
   group: appdirector.randoli.ca
@@ -162,6 +163,7 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.4.1
+  creationTimestamp: null
   name: clusterwideappdirectoragents.appdirector.randoli.ca
 spec:
   group: appdirector.randoli.ca
@@ -330,6 +332,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+  creationTimestamp: null
   name: app-director-manager-role
 rules:
 - apiGroups:
@@ -541,6 +544,14 @@ rules:
   - delete
   - get
 - apiGroups:
+  - monitoring.coreos.com
+  resources:
+  - servicemonitors
+  verbs:
+  - create
+  - delete
+  - get
+- apiGroups:
   - policy
   resources:
   - poddisruptionbudgets
@@ -593,6 +604,19 @@ rules:
   - list
   - watch
 - apiGroups:
+  - resolution.tekton.dev
+  resources:
+  - resolutionrequests
+  - resolutionrequests/status
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
   - tekton.dev
   resources:
   - clustertasks
@@ -621,13 +645,29 @@ rules:
   - tekton.dev
   resources:
   - conditions
+  - customruns
   - pipelineresources
   - pipelineruns
   - pipelines
   - taskruns
   - tasks
+  - runs
   verbs:
   - deletecollection
+- apiGroups:
+  - tekton.dev
+  resources:
+  - customruns
+  - customruns/finalizers
+  - customruns/status
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
 - apiGroups:
   - tekton.dev
   resources:
@@ -709,14 +749,6 @@ rules:
   - patch
   - update
   - watch
-- apiGroups:
-  - monitoring.coreos.com
-  resources: 
-  - servicemonitors
-  verbs: 
-  - create
-  - delete
-  - get
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
