@@ -604,6 +604,19 @@ rules:
   - list
   - watch
 - apiGroups:
+  - resolution.tekton.dev
+  resources:
+  - resolutionrequests
+  - resolutionrequests/status
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
   - tekton.dev
   resources:
   - clustertasks
@@ -632,13 +645,29 @@ rules:
   - tekton.dev
   resources:
   - conditions
+  - customruns
   - pipelineresources
   - pipelineruns
   - pipelines
   - taskruns
   - tasks
+  - runs
   verbs:
   - deletecollection
+- apiGroups:
+  - tekton.dev
+  resources:
+  - customruns
+  - customruns/finalizers
+  - customruns/status
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
 - apiGroups:
   - tekton.dev
   resources:
