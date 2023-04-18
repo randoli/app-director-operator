@@ -47,12 +47,12 @@ spec:
             description: AppDirectorAgentSpec defines the desired state of AppDirectorAgent
             properties:
               agentCertsSecretName:
-                default: guvnor-certs
+                default: appdir-agent-certs
                 description: AgentCertsSecretName specifies the name of the secret
                   that contains the required certificates for the agent to run.
                 type: string
               agentConfigSecretName:
-                default: guvnor-secret
+                default: appdir-agent-secret
                 description: AgentSecretName specifies the name of the secret that
                   contains required configuration for the agent to run.
                 type: string
@@ -196,12 +196,12 @@ spec:
               of ClusterWideAppDirectorAgent
             properties:
               agentCertsSecretName:
-                default: guvnor-certs
+                default: appdir-agent-certs
                 description: AgentCertsSecretName specifies the name of the secret
                   that contains the required certificates for the agent to run.
                 type: string
               agentConfigSecretName:
-                default: guvnor-secret
+                default: appdir-agent-secret
                 description: AgentConfigSecretName specifies the name of the secret
                   that contains required configuration for the agent to run.
                 type: string
@@ -900,7 +900,7 @@ spec:
         - --leader-elect
         command:
         - /manager
-        image: docker.io/randoli/app-director-operator:1.0.0
+        image: docker.io/randoli/app-director-operator:1.0.1
         imagePullPolicy: Always
         livenessProbe:
           httpGet:

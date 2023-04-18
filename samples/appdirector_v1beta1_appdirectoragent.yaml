@@ -1,14 +1,13 @@
 apiVersion: appdirector.randoli.ca/v1beta1
 kind: AppDirectorAgent
 metadata:
-  name: guvnor
-  namespace: app-director
+  name: appdir-agent
+  namespace: app-namespace
 spec:
-  managedNamespaces:
-  - example-app
-  agentCertsSecretName: guvnor-certs
-  agentConfigSecretName: guvnor-secret
-status:
-  conditions: []
-  managedNamespaceHistory: []
+  # Optional Field
+  # managedNamespaces:
+  #  - app-director
+  agentCertsSecretName: appdir-agent-certs
+  agentConfigSecretName: appdir-agent-secret
+
 
