@@ -73,13 +73,14 @@ spec:
                   description: "Condition contains details for one aspect of the current
                     state of this API Resource. --- This struct is intended for direct
                     use as an array at the field path .status.conditions.  For example,
-                    type FooStatus struct{     // Represents the observations of a
-                    foo's current state.     // Known .status.conditions.type are:
-                    \"Available\", \"Progressing\", and \"Degraded\"     // +patchMergeKey=type
-                    \    // +patchStrategy=merge     // +listType=map     // +listMapKey=type
-                    \    Conditions []metav1.Condition `json:\"conditions,omitempty\"
-                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`
-                    \n     // other fields }"
+                    \n \ttype FooStatus struct{ \t    // Represents the observations
+                    of a foo's current state. \t    // Known .status.conditions.type
+                    are: \"Available\", \"Progressing\", and \"Degraded\" \t    //
+                    +patchMergeKey=type \t    // +patchStrategy=merge \t    // +listType=map
+                    \t    // +listMapKey=type \t    Conditions []metav1.Condition
+                    `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\"
+                    protobuf:\"bytes,1,rep,name=conditions\"` \n \t    // other fields
+                    \t}"
                   properties:
                     lastTransitionTime:
                       description: lastTransitionTime is the last time the condition
@@ -222,13 +223,14 @@ spec:
                   description: "Condition contains details for one aspect of the current
                     state of this API Resource. --- This struct is intended for direct
                     use as an array at the field path .status.conditions.  For example,
-                    type FooStatus struct{     // Represents the observations of a
-                    foo's current state.     // Known .status.conditions.type are:
-                    \"Available\", \"Progressing\", and \"Degraded\"     // +patchMergeKey=type
-                    \    // +patchStrategy=merge     // +listType=map     // +listMapKey=type
-                    \    Conditions []metav1.Condition `json:\"conditions,omitempty\"
-                    patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`
-                    \n     // other fields }"
+                    \n \ttype FooStatus struct{ \t    // Represents the observations
+                    of a foo's current state. \t    // Known .status.conditions.type
+                    are: \"Available\", \"Progressing\", and \"Degraded\" \t    //
+                    +patchMergeKey=type \t    // +patchStrategy=merge \t    // +listType=map
+                    \t    // +listMapKey=type \t    Conditions []metav1.Condition
+                    `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\"
+                    protobuf:\"bytes,1,rep,name=conditions\"` \n \t    // other fields
+                    \t}"
                   properties:
                     lastTransitionTime:
                       description: lastTransitionTime is the last time the condition
@@ -374,6 +376,13 @@ rules:
   - namespaces/finalizers
   verbs:
   - update
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  - persistentvolumes
+  verbs:
+  - list
 - apiGroups:
   - admissionregistration.k8s.io
   resources:
@@ -523,6 +532,12 @@ rules:
   - horizontalpodautoscalers
   verbs:
   - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
 - apiGroups:
   - coordination.k8s.io
   resources:
@@ -536,17 +551,23 @@ rules:
   - update
   - watch
 - apiGroups:
-  - networking.k8s.io
+  - metrics.k8s.io
   resources:
-  - ingresses
+  - nodes
   verbs:
-  - create
-  - delete
   - get
 - apiGroups:
   - monitoring.coreos.com
   resources:
   - servicemonitors
+  verbs:
+  - create
+  - delete
+  - get
+- apiGroups:
+  - networking.k8s.io
+  resources:
+  - ingresses
   verbs:
   - create
   - delete
@@ -617,6 +638,12 @@ rules:
   - update
   - watch
 - apiGroups:
+  - storage.k8s.io
+  resources:
+  - storageclasses
+  verbs:
+  - list
+- apiGroups:
   - tekton.dev
   resources:
   - clustertasks
@@ -649,9 +676,9 @@ rules:
   - pipelineresources
   - pipelineruns
   - pipelines
+  - runs
   - taskruns
   - tasks
-  - runs
   verbs:
   - deletecollection
 - apiGroups:
@@ -886,7 +913,7 @@ spec:
         - --leader-elect
         command:
         - /manager
-        image: docker.io/randoli/app-director-operator:1.0.1
+        image: docker.io/randoli/app-director-operator:1.1.0
         imagePullPolicy: Always
         livenessProbe:
           httpGet:
