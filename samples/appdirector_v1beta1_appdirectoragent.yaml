@@ -4,10 +4,7 @@ metadata:
   name: appdir-agent
   namespace: app-namespace
 spec:
-  # Optional Field
-  # managedNamespaces:
-  #  - app-director
+  managedNamespaces:
+    - app-namespace
   agentCertsSecretName: appdir-agent-certs
   agentConfigSecretName: appdir-agent-secret
-
-
