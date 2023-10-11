@@ -1,0 +1,10 @@
+apiVersion: appdirector.randoli.ca/v1beta1
+kind: AppDirectorAgent
+metadata:
+  name: appdir-agent
+  namespace: app-namespace
+spec:
+  managedNamespaces:
+    - app-namespace
+  agentCertsSecretName: appdir-agent-certs
+  agentConfigSecretName: appdir-agent-secret

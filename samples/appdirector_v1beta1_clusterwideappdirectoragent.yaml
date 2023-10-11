@@ -1,0 +1,8 @@
+apiVersion: appdirector.randoli.ca/v1beta1
+kind: ClusterWideAppDirectorAgent
+metadata:
+  name: appdir-agent
+spec:
+  namespace: app-namespace
+  agentCertsSecretName: appdir-agent-certs
+  agentConfigSecretName: appdir-agent-secret
