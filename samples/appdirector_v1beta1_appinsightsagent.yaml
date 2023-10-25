@@ -1,0 +1,10 @@
+apiVersion: appdirector.randoli.ca/v1beta1
+kind: AppInsightsAgent
+metadata:
+  name: app-insights-agent
+spec:
+  namespace: app-director
+  agentCertsSecretName: appdir-agent-certs
+  agentConfigSecretName: appdir-agent-secret
+  prometheusUrl: localhost:9090/metrics
+  openCostURL: http://opencost.opencost.svc.cluster.local:9003
