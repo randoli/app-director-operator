@@ -6,5 +6,5 @@ spec:
   namespace: app-director
   agentCertsSecretName: appdir-agent-certs
   agentConfigSecretName: appdir-agent-secret
-  prometheusUrl: localhost:9090/metrics
+  prometheusUrl: http://prometheus-operated.prometheus.svc.cluster.local:9090
   openCostURL: http://opencost.opencost.svc.cluster.local:9003
